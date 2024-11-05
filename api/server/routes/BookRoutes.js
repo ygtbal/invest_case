@@ -4,6 +4,7 @@ import BookController from "../controllers/BookController";
 const router = Router();
 
 router.get("/", BookController.getAllBooks);
+router.get("/:id", BookController.getBook);
 router.post("/add", BookController.addBook);
 router.put("/borrow", BookController.borrowBook);
 router.post("/return", BookController.returnBook);

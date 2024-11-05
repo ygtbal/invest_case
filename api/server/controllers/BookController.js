@@ -25,6 +25,16 @@ class BookController {
       return util.send(res);
     }
   }
+  static async getBook(req, res) {
+    try {
+      const book = await BookService.getBook(req.params.id);
+      util.setSuccess(200, "Book received", book);
+      return util.send(res);
+    } catch (error) {
+      util.setError(400, error.message);
+      return util.send(res);
+    }
+  }
   static async borrowBook(req, res) {
     try {
       const { book_id, user_id } = req.body;

@@ -1,3 +1,4 @@
+import { Sequelize } from "sequelize";
 import { sequelize, database } from "../src/models";
 
 class BookService {
@@ -11,6 +12,35 @@ class BookService {
   static async addBook(newBook) {
     try {
       return await database.Books.create(newBook);
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async getBook(id) {
+    try {
+      return await database.Books.findOne({
+        where: {
+          id,
+        },
+        attributes: [
+          "id",
+          "name",
+          "author",
+          [
+            Sequelize.fn(
+              "ROUND",
+              Sequelize.fn("AVG", Sequelize.col("Returns.score")),
+              2
+            ),
+            "average",
+          ],
+        ],
+        include: {
+          model: database.Returns,
+          attributes: [],
+        },
+        group: ["Books.id"],
+      });
     } catch (error) {
       throw error;
     }
