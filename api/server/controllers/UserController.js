@@ -14,6 +14,17 @@ class UserController {
       return util.send(res);
     }
   }
+  static async getUser(req, res) {
+    try {
+      const user = await UserServices.getUser(req.params.id);
+      util.setSuccess(200, "User retrieved", user);
+      return util.send(res);
+    } catch (error) {
+      console.log("error", error);
+      util.setError(400);
+      return util.send(res);
+    }
+  }
   static async addUser(req, res) {
     try {
       const newUser = req.body;

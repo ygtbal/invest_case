@@ -25,6 +25,37 @@ class BookController {
       return util.send(res);
     }
   }
+  static async borrowBook(req, res) {
+    try {
+      const { book_id, user_id } = req.body;
+      const updatedBook = await BookService.borrowBook(book_id, user_id);
+      if (updatedBook) {
+        util.setSuccess(200, "Book Borrowed!");
+        return util.send(res);
+      }
+      util.setError(200, `You can not borrow this book`);
+      return util.send(res);
+    } catch (error) {
+      util.setError(400, error.message);
+      return util.send(res);
+    }
+  }
+  static async returnBook(req, res) {
+    try {
+      const { book_id, user_id, score } = req.body;
+      const result = await BookService.returnBook(book_id, user_id, score);
+      console.log("result", result);
+      if (result) {
+        util.setSuccess(200, "Book return successful");
+        return util.send(res);
+      }
+      util.setError(400, "Be sure that this book is borrowed by you");
+      return util.send(res);
+    } catch (error) {
+      util.setError(400, error.message);
+      return util.send(res);
+    }
+  }
 }
 
 export default BookController;

@@ -1,4 +1,4 @@
-import database from "../src/models";
+import { sequelize, database } from "../src/models";
 
 class BookService {
   static async getAllBooks() {
@@ -11,6 +11,48 @@ class BookService {
   static async addBook(newBook) {
     try {
       return await database.Books.create(newBook);
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async borrowBook(id, user_id) {
+    try {
+      const result = await database.Books.update(
+        { user_id },
+        { where: { user_id: null, id } }
+      );
+      return result[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async returnBook(book_id, user_id, score) {
+    try {
+      return await sequelize.transaction(async (t) => {
+        const update = await database.Books.update(
+          {
+            user_id: null,
+          },
+          {
+            where: {
+              id: book_id,
+              user_id,
+            },
+            transaction: t,
+          }
+        );
+        if (update[0]) {
+          const user = await database.Returns.create(
+            {
+              user_id,
+              book_id,
+              score,
+            },
+            { transaction: t }
+          );
+          return user;
+        }
+      });
     } catch (error) {
       throw error;
     }

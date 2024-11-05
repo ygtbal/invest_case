@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Borrowers", {
+    await queryInterface.createTable("Returns", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,23 +13,20 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
-          key: "id",
+          foreignKey: "id",
         },
+        allowNull: false,
       },
       book_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "Books",
-          key: "id",
+          foreignKey: "id",
         },
-      },
-      return: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        allowNull: false,
       },
       score: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
@@ -42,6 +39,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Borrowers");
+    await queryInterface.dropTable("Returns");
   },
 };
