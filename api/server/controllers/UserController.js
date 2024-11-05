@@ -17,7 +17,11 @@ class UserController {
   static async getUser(req, res) {
     try {
       const user = await UserServices.getUser(req.params.id);
-      util.setSuccess(200, "User retrieved", user);
+      if (user) {
+        util.setSuccess(200, "User retrieved", user);
+        return util.send(res);
+      }
+      util.setError(404, "User not found");
       return util.send(res);
     } catch (error) {
       util.setError(400);

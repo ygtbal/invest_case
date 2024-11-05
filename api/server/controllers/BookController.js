@@ -28,7 +28,11 @@ class BookController {
   static async getBook(req, res) {
     try {
       const book = await BookService.getBook(req.params.id);
-      util.setSuccess(200, "Book received", book);
+      if (book) {
+        util.setSuccess(200, "Book received", book);
+        return util.send(res);
+      }
+      util.setError(404, "Book not found");
       return util.send(res);
     } catch (error) {
       util.setError(400, error.message);
@@ -43,7 +47,7 @@ class BookController {
         util.setSuccess(200, "Book Borrowed!");
         return util.send(res);
       }
-      util.setError(200, `You can not borrow this book`);
+      util.setError(400, `You can not borrow this book`);
       return util.send(res);
     } catch (error) {
       util.setError(400, error.message);
