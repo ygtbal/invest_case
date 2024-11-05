@@ -54,7 +54,6 @@ class BookController {
     try {
       const { book_id, user_id, score } = req.body;
       const result = await BookService.returnBook(book_id, user_id, score);
-      console.log("result", result);
       if (result) {
         util.setSuccess(200, "Book return successful");
         return util.send(res);

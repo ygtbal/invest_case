@@ -20,7 +20,6 @@ class UserController {
       util.setSuccess(200, "User retrieved", user);
       return util.send(res);
     } catch (error) {
-      console.log("error", error);
       util.setError(400);
       return util.send(res);
     }

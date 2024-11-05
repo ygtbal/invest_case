@@ -4,7 +4,9 @@ import { sequelize, database } from "../src/models";
 class BookService {
   static async getAllBooks() {
     try {
-      return await database.Books.findAll();
+      return await database.Books.findAll({
+        attributes: { exclude: ["user_id"] },
+      });
     } catch (error) {
       throw error;
     }
